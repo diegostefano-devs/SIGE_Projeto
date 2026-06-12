@@ -1,5 +1,7 @@
 from funcoes import cadastroproduto, consultarproduto, vendaproduto, comprarproduto, listarproduto, \
-    cadastrocliente, procurarcliente, listarcliente
+    cadastrocliente, procurarcliente, listarcliente, infovalida
+from time import sleep
+import os
 
 listadeprodutos = [
     {
@@ -145,11 +147,11 @@ listadeclientes = [
         "produtos": []
     }
 ]
+
 while True:
     # Menu de opções
-    usuario = input(
-        "Digite uma opção\n"
-        "1)Cadastrar produto\n"
+    print(
+        "\n1)Cadastrar produto\n"
         "2)Consultar produto\n"
         "3)Compra de produto\n"
         "4)Venda de produto\n"
@@ -158,66 +160,42 @@ while True:
         "7)Listar clientes\n"
         "8)Sair\n"
     )
-    if usuario == "1":
-        # Cadastro de produto
-        id = int(input("Digite o id do produto: "))
-        nome = input("Digite o nome do produto: ")
-        descricao = input(("Digite uma descrição do produto: "))
-        tamanho = input("Digite o tamanho do produto: ")
-        quantidade = int(input("Digite o quantidade do produto: "))
-        # Adciona as informações dentro do dict produto
-        produto = {
-            "id": id,
-            "nome": nome,
-            "descricao": descricao,
-            "tamanho": tamanho,
-            "quantidade": quantidade
-        }
-        print(listadeprodutos)
-        # chama a função de cadastro de produto para cadastrar o dict produto dentro da lista de produtos
-        # todas as validações de quantidade, id duplicado é feia dentro da função cadastro de produto
-        cadastroproduto(produto, listadeprodutos)
 
-    elif usuario == "2":
-        id = int(input("Digite o id do produto: "))
-        consultarproduto(id, listadeprodutos)
+    usuario = input('Digite uma opção: ')
+    match usuario:
+        case '1':
+            cadastroproduto(listadeprodutos)
+        case '2':
+            id = int(input("Digite o id do produto: "))
+            consultarproduto(id, listadeprodutos)
+        case '3':
+            id_compra= int(input("Digite o id do produto para compra: "))
+            quantidade_compra = int(input("Digite a quantidade do produto para compra: "))
+            comprarproduto(id_compra, quantidade_compra, listadeprodutos)
+        case '4':
+            id_venda = int(input("Digite o id do produto para venda: "))
+            quantidade_venda = int(input("Digite a quantidade do produto para venda: "))
+            nome_cliente = str(input("Digite o nome do cliente: "))
+            # a função procura cliente vai percorrer a lista de clientes para verificar se há clientes cadastrados
 
-    elif usuario == "3":
-        id_compra= int(input("Digite o id do produto para compra: "))
-        quantidade_compra = int(input("Digite a quantidade do produto para compra: "))
-        comprarproduto(id_compra, quantidade_compra, listadeprodutos)
+            cliente = procurarcliente(nome_cliente, listadeclientes)
 
-    elif usuario == "4":
-        id_venda = int(input("Digite o id do produto para venda: "))
-        quantidade_venda = int(input("Digite a quantidade do produto para venda: "))
-        nome_cliente = str(input("Digite o nome do cliente: "))
-        # a função procura cliente vai percorrer a lista de clientes para verificar se há clientes cadastrados
+            if cliente is None:
+                print("Não existe esse cliente")
+            else:
+                vendaproduto(id_venda, listadeprodutos, quantidade_venda, cliente)
 
-        cliente = procurarcliente(nome_cliente, listadeclientes)
-
-        if cliente is None:
-            print("Não existe esse cliente")
-        else:
-            vendaproduto(id_venda, listadeprodutos, quantidade_venda, cliente)
+        case '5':
+            listarproduto(listadeprodutos)
+        case '6':
+            cadastrocliente(listadeclientes)
+        case '7':
+            listarcliente(listadeclientes)
+        case '8':
+            print("ENCERRANDO...")
+            exit()
+        case _:
+            print("OPÇÃO INVÁLIDA")
 
 
-    elif usuario == "5":
-       listarproduto(listadeprodutos)
-
-    elif usuario == "6":
-        nome = str(input("Digite o nome do cliente: "))
-        cpf = str(input("Digite o cpf do cliente: "))
-        endereco = str(input("Digite o endereço do cliente: "))
-        telefone = str(input("Digite o telefone do cliente: "))
-        # a função cadastro cliente é utilizada para toda vez que é necessário o cadastro
-        cliente = cadastrocliente(nome, cpf, telefone, endereco)
-        # depois adciona o cliente cadastrado na lista de clientes
-        listadeclientes.append(cliente)
-        print("Cliente cadastrado com sucesso!")
-
-    elif usuario == "7":
-        listarcliente(listadeclientes)
-
-    elif usuario == "8":
-        print("Saindo do programa")
-        exit()
+  

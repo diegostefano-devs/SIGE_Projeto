@@ -1,19 +1,46 @@
+  
+def infovalida (chave, valor_procurado, lista_de_dados):
+    for item in lista_de_dados:
+        if item[chave] == valor_procurado:
+            return True
+    return False
+            
 
-def cadastroproduto(produto, listadeprodutos):
-    # verifica se a quantiade cadastrada é menor que 0
-    if produto["quantidade"] < 0:
-        print("Não é possível cadastrar quantidade negativa")
-        return None
-    # Verifica se há algum produto com esse id cadastrado
-    for itens in listadeprodutos:
-        if itens["id"] == produto["id"]:
-            print("ID já cadastrado.")
-            return None
-    if produto:
-        listadeprodutos.append(produto)
-        print("Produto cadastrado com sucesso")
-        mostrarproduto(produto)
+def cadastroproduto(listadeprodutos):
+    print('\n############## CADASTRO DE PRODUTOS ##########\n')
 
+    #Validação para garantir que o ID cadastrado seja único
+    while True:
+        id = int(input("Digite o id do produto: "))
+
+        if infovalida('id', id, listadeprodutos):
+            print("\nERROR: ID já cadastrado no sistema")
+        else:
+            break
+
+    nome = input("Digite o nome do produto: ").strip().upper()
+    descricao = input(("Digite uma descrição do produto: ")).strip().upper()
+    tamanho = input("Digite o tamanho do produto: ")
+    
+    while True:
+        quantidade = int(input("Digite o quantidade do produto: "))
+        if quantidade < 0:
+            print("\nERROR: Não é possível cadastrar quantidade negativa")
+        else: 
+            break    
+
+    produto = {
+            "id": id,
+            "nome": nome,
+            "descricao": descricao,
+            "tamanho": tamanho,
+            "quantidade": quantidade
+        }
+    
+    listadeprodutos.append(produto)
+    print("PRODUTO CADASTRADO COM SUCESSO!\n")
+    
+    
 def consultarproduto(id,listadeprodutos ):
     # o for vai percorrer todos os id dentro da lista listadeprodutos
     for produto in listadeprodutos:
@@ -23,12 +50,12 @@ def consultarproduto(id,listadeprodutos ):
                 return
     # esse print está fora do if (funciona como um else), pq se o código não entrar dentro do if,
     # vai retornar o que está no print
-    print("Produto não encontrado")
+    print("ERROR: Produto não encontrado")
 
 def comprarproduto(id,quantidade_compra, listadeprodutos):
     # Verifica se a quantidade de compra é menor ou igual a zero
     if quantidade_compra <= 0:
-        print("Quantidade inválida.")
+        print("ERROR: Quantidade inválida.")
         return
 
     # O for procura o produto pelo id e depois aumenta a quantidade do produto
@@ -92,13 +119,40 @@ def listarcliente(listadeclientes):
     for cliente in listadeclientes:
         print(
             f"\nNome: {cliente['nome']}"
-            f"\nCPF: {cliente['cpf']}"
-            f"\nTelefone: {cliente['telefone']}"
+            f"\nCPF: {cliente['cpf'][:3]}-{cliente['cpf'][3:6]}-{cliente['cpf'][6:9]}.{cliente['cpf'][9:]}"
+            f"\nTelefone: ({cliente['telefone'][:2]}) {cliente['telefone'][2:7]}-{cliente['telefone'][7:]}"
             f"\nEndereço: {cliente['endereco']}"
             f"\nProdutos: {cliente['produtos']}"
         )
 
-def cadastrocliente(nome, cpf, telefone, endereco):
+def cadastrocliente(listadecliente):
+    nome = str(input("Digite o nome do cliente: ")).strip().upper()
+
+    #Validação de CPF
+    while True:
+        cpf = str(input("Digite o cpf do cliente: "))
+        if len(cpf) != 11:
+            print("\nERROR: CPF inválido. Coloque uma informação válida.")
+        else:
+            break
+
+    while True:
+        if infovalida('cpf', cpf, listadecliente):
+            print("\nERROR: CPF já existe no banco de daods.")
+            cpf = str(input("Digite o cpf do cliente: "))
+        else:
+            break
+
+    #Validação de telefone
+    while True:
+        telefone = str(input("Digite o telefone do cliente: "))
+        if len(telefone) != 11:
+            print("\nERROR: Número inválido. Coloque uma informação válida.")
+        else:
+            break
+
+    endereco = str(input("Digite o endereço do cliente: ")).strip().upper()
+
     cliente = {
         "nome": nome,
         "cpf": cpf,
@@ -107,7 +161,8 @@ def cadastrocliente(nome, cpf, telefone, endereco):
         "produtos": []
     }
 
-    return cliente
+    listadecliente.append(cliente)
+    print("Cliente cadastrado com sucesso!")
 
 def procurarcliente(nome_cliente, listadeclientes):
     # Procurar na base de dados se existe o cliente para cadastro de venda
