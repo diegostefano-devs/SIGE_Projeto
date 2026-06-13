@@ -173,18 +173,7 @@ while True:
             quantidade_compra = int(input("Digite a quantidade do produto para compra: "))
             comprarproduto(id_compra, quantidade_compra, listadeprodutos)
         case '4':
-            id_venda = int(input("Digite o id do produto para venda: "))
-            quantidade_venda = int(input("Digite a quantidade do produto para venda: "))
-            nome_cliente = str(input("Digite o nome do cliente: "))
-            # a função procura cliente vai percorrer a lista de clientes para verificar se há clientes cadastrados
-
-            cliente = procurarcliente(nome_cliente, listadeclientes)
-
-            if cliente is None:
-                print("Não existe esse cliente")
-            else:
-                vendaproduto(id_venda, listadeprodutos, quantidade_venda, cliente)
-
+            vendaproduto(listadeprodutos, listadeclientes)
         case '5':
             listarproduto(listadeprodutos)
         case '6':
