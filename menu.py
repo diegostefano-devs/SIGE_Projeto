@@ -1,149 +1,149 @@
 from funcoes import cadastroproduto, consultarproduto, vendaproduto, comprarproduto, listarproduto, \
-    cadastrocliente, procurarcliente, listarcliente, infovalida
+    cadastrocliente, procurarcliente, listarcliente, infovalida, salvarcliente
 from time import sleep
 import os
 
 listadeprodutos = [
     {
         "id": 1,
-        "nome": "Vestido Floral",
-        "descricao": "Vestido infantil estampado floral",
+        "nome": "VESTIDO FLORAl",
+        "descricao": "VESTIDO INFANTIL ESTAMPADO FLORAL",
         "tamanho": "P",
         "quantidade": 12
     },
     {
         "id": 2,
-        "nome": "Conjunto Verão",
-        "descricao": "Conjunto camiseta e short",
+        "nome": "CONJUNTO VERÃO",
+        "descricao": "CONJUNTO CAMISETA E SHORT",
         "tamanho": "M",
         "quantidade": 20
     },
     {
         "id": 3,
-        "nome": "Macacão Jeans",
-        "descricao": "Macacão infantil jeans",
+        "nome": "MACACÃO JEANS",
+        "descricao": "MACACÃO INFANTIL JEANS",
         "tamanho": "G",
         "quantidade": 8
     },
     {
         "id": 4,
-        "nome": "Camiseta Dino",
-        "descricao": "Camiseta estampada dinossauro",
+        "nome": "CAMISETA DINO",
+        "descricao": "CAMISETA ESTAMPADA DINOSSAURO",
         "tamanho": "6",
         "quantidade": 15
     },
     {
         "id": 5,
-        "nome": "Short Jeans",
-        "descricao": "Short jeans infantil",
+        "nome": "SHORT JEANS",
+        "descricao": "SHORT JEANS INFANTIL",
         "tamanho": "4",
         "quantidade": 18
     },
     {
         "id": 6,
-        "nome": "Pijama Estrelas",
-        "descricao": "Pijama infantil confortável",
+        "nome": "PIJAMA ESTRELAS",
+        "descricao": "PIJAMA INFANTIL CONFORTÁVEL",
         "tamanho": "8",
         "quantidade": 10
     },
     {
         "id": 7,
-        "nome": "Vestido Festa",
-        "descricao": "Vestido infantil para festa",
+        "nome": "VESTIDO FESTA",
+        "descricao": "VESTIDO INFANTIL PARA FESTA",
         "tamanho": "2",
         "quantidade": 6
     },
     {
         "id": 8,
-        "nome": "Jaqueta Infantil",
-        "descricao": "Jaqueta de frio infantil",
+        "nome": "JAQUETA INFANTIL",
+        "descricao": "JAQUETA DE FRIO INFANTIL",
         "tamanho": "10",
         "quantidade": 5
     },
     {
         "id": 9,
-        "nome": "Body Bebê",
-        "descricao": "Body manga curta bebê",
+        "nome": "BODY BEBÊ",
+        "descricao": "BODY MANGA CURTA BEBÊ",
         "tamanho": "RN",
         "quantidade": 25
     },
     {
         "id": 10,
-        "nome": "Tênis Infantil",
-        "descricao": "Tênis casual infantil",
+        "nome": "TÊNIS INFANTIL",
+        "descricao": "TÊNIS CASUAL INFANTIL",
         "tamanho": "28",
         "quantidade": 9
     }
 ]
 listadeclientes = [
     {
-        "nome": "Maria Silva",
+        "nome": "MARIA SILVA",
         "cpf": "11111111111",
         "telefone": "74999990001",
-        "endereco": "Rua das Flores, 101",
+        "endereco": "RUA DAS FLORES, 101",
         "produtos": []
     },
     {
-        "nome": "João Souza",
+        "nome": "JOÃO SOUZA",
         "cpf": "22222222222",
         "telefone": "74999990002",
-        "endereco": "Rua Central, 45",
+        "endereco": "RUA CENTRAL, 45",
         "produtos": []
     },
     {
-        "nome": "Ana Oliveira",
+        "nome": "ANA OLIVEIRA",
         "cpf": "33333333333",
         "telefone": "74999990003",
-        "endereco": "Av. Bahia, 200",
+        "endereco": "AV. BAHIA, 200",
         "produtos": []
     },
     {
-        "nome": "Carlos Santos",
+        "nome": "CARLOS SANTOS",
         "cpf": "44444444444",
         "telefone": "74999990004",
-        "endereco": "Rua Primavera, 78",
+        "endereco": "RUA PRIMAVERA, 78",
         "produtos": []
     },
     {
-        "nome": "Fernanda Lima",
+        "nome": "FERNANDA LIMA",
         "cpf": "55555555555",
         "telefone": "74999990005",
-        "endereco": "Rua do Comércio, 90",
+        "endereco": "RUA DO COMÉRCIO, 90",
         "produtos": []
     },
     {
-        "nome": "Pedro Rocha",
+        "nome": "PEDRO ROCHA",
         "cpf": "66666666666",
         "telefone": "74999990006",
-        "endereco": "Rua São José, 300",
+        "endereco": "RUA SÃO JOSÉ, 300",
         "produtos": []
     },
     {
-        "nome": "Juliana Alves",
+        "nome": "JULIANA ALVES",
         "cpf": "77777777777",
         "telefone": "74999990007",
-        "endereco": "Rua Nova, 55",
+        "endereco": "RUA NOVA, 55",
         "produtos": []
     },
     {
-        "nome": "Lucas Pereira",
+        "nome": "LUCAS PEREIRA",
         "cpf": "88888888888",
         "telefone": "74999990008",
-        "endereco": "Rua das Palmeiras, 18",
+        "endereco": "RUA DAS PALMEIRAS, 18",
         "produtos": []
     },
     {
-        "nome": "Camila Costa",
+        "nome": "CAMILA COSTA",
         "cpf": "99999999999",
         "telefone": "74999990009",
-        "endereco": "Rua Horizonte, 410",
+        "endereco": "RUA HORIZONTE, 410",
         "produtos": []
     },
     {
-        "nome": "Rafael Martins",
+        "nome": "RAFAEL MARTINS",
         "cpf": "10101010101",
         "telefone": "74999990010",
-        "endereco": "Rua Esperança, 77",
+        "endereco": "RUA ESPERANÇA, 77",
         "produtos": []
     }
 ]
@@ -178,8 +178,18 @@ while True:
             listarproduto(listadeprodutos)
         case '6':
             cadastrocliente(listadeclientes)
+            salvarcliente(listadeclientes)
         case '7':
-            listarcliente(listadeclientes)
+            with open('clientes.txt', 'r', encoding=('utf-8')) as arquivo:
+                contador = 0
+                for ler in arquivo:
+                    print(ler, end='')
+                    contador += 1
+
+                    if contador == 4:
+                        print("------------------------------------\n")
+                        contador = 0
+
         case '8':
             print("ENCERRANDO...")
             exit()

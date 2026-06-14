@@ -1,4 +1,13 @@
   
+def salvarcliente (listadeclientes):
+    with open ('clientes.txt', 'w', encoding='utf-8') as arquivo:
+        for cliente in listadeclientes:
+            linha = f''' NOME:{cliente['nome']} 
+            CPF: {cliente['cpf']} 
+            ENDEREÇO: {cliente['endereco']} 
+            TELEFONE: {cliente['telefone']}\n'''
+            arquivo.write(linha)
+
 def infovalida (chave, valor_procurado, lista_de_dados):
     for item in lista_de_dados:
         if item[chave] == valor_procurado:
@@ -173,7 +182,7 @@ def listarcliente(listadeclientes):
             f"\nProdutos: {cliente['produtos']}"
         )
 
-def cadastrocliente(listadecliente):
+def cadastrocliente(listadeclientes):
     print('\n############## CADASTRO DE CLIENTES ##########\n')
     nome = str(input("Digite o nome do cliente: ")).strip().upper()
 
@@ -186,7 +195,7 @@ def cadastrocliente(listadecliente):
             break
 
     while True:
-        if infovalida('cpf', cpf, listadecliente):
+        if infovalida('cpf', cpf, listadeclientes):
             print("\nERROR: CPF já existe no banco de daods.")
             cpf = str(input("Digite o cpf do cliente: "))
         else:
@@ -210,7 +219,7 @@ def cadastrocliente(listadecliente):
         "produtos": []
     }
 
-    listadecliente.append(cliente)
+    listadeclientes.append(cliente)
     print("Cliente cadastrado com sucesso!")
 
 def procurarcliente(nome_cliente, listadeclientes):
