@@ -1,19 +1,127 @@
-  
-def salvarcliente (listadeclientes):
-    with open ('clientes.txt', 'w', encoding='utf-8') as arquivo:
-        for cliente in listadeclientes:
-            linha = f''' NOME:{cliente['nome']} 
-            CPF: {cliente['cpf']} 
-            ENDEREÇO: {cliente['endereco']} 
-            TELEFONE: {cliente['telefone']}\n'''
-            arquivo.write(linha)
-
-def infovalida (chave, valor_procurado, lista_de_dados):
+#FUNÇÃO PARA VERIFICAR SE A INFORMAÇÃO DIGITA EXISTE NA LISTA
+def infovalida (chave, valor_procurado, lista_de_dados): #KEY DO DICIONARIO, VALOR COLOCADO NO USUÁRIO, LISTA PARA PROCURAR
+    #PERCORRE A LISTA COLOCADA 
     for item in lista_de_dados:
+        #CASO EXISTA NA LISTA, RETORNA VERDADEIRO 
         if item[chave] == valor_procurado:
             return True
     return False
+
+# FUNÇÃO PARA ADICIONAR OS CLIENTES DO DOCUMENTO À LISTA
+def carregar_clientes ():
+    listadeclientes = []
+    # ELE VAI TENTAR ABRIR O DOCUMENTO 'clientes.txt'
+    try:
+        with open ('clientes.txt', 'r', encoding='utf-8') as arquivo:
+            #VAI PERCORRER CADA LINHA DO DOCUMENTO
+            for linha in arquivo:
+                #AO RETIRAR OS ESPAÇOS E SEPARAR POR BASE DO ; VAI ANEXAR CADA DADO A UMA VARIAVEL
+                nome, cpf, telefone, endereco  = linha.strip().split(';')
+                #VAI POR AS VARIAVEIS EM UM DICIONARIO
+                clientes = {
+                        "nome": nome,
+                        "cpf": cpf,
+                        "endereco": endereco,
+                        "telefone": telefone,
+                        "produtos": []
+                    }
+                # VAI ADICIONAR A LISTA
+                listadeclientes.append(clientes)
+    #CASO NÃO CONSIGA, VAI APENAS IGNORAR
+    except FileNotFoundError:
+        pass
+    return listadeclientes
+
+# FUNÇÃO PARA ADICIONAR OS PRODUTOS DO DOCUMENTO À LISTA
+def carregar_produtos():
+    listadeprodutos = []
+    try:
+        with open ('produtos.txt', 'r', encoding='utf-8') as arquivo:
+            #VAI PERCORRER CADA LINHA DO DOCUMENTO
+            for linha in arquivo:
+                #AO RETIRAR OS ESPAÇOS E SEPARAR POR BASE DO ; VAI ANEXAR CADA DADO A UMA VARIAVEL
+                id, nome, descricao, tamanho, quantidade = linha.strip().split(';')
+                #VAI POR AS VARIAVEIS EM UM DICIONARIO
+                produtos = {
+                    'id': int(id),
+                    'nome': nome,
+                    'descricao': descricao,
+                    'tamanho': tamanho,
+                    'quantidade': quantidade
+                }
+                # VAI ADICIONAR A LISTA
+                listadeprodutos.append(produtos)
+    #CASO NÃO CONSIGA, VAI APENAS IGNORAR       
+    except FileNotFoundError:
+        pass
+    return listadeprodutos     
+
+#FUNÇÃO PARA SALVAR OS CLIENTES NO DOCUMENTO
+def salvarcliente (listadeclientes):
+      #ABRE OU CRIA O DOCUMENTO 'clientes.txt" E RODA O BLOCO DE CÓDIGO
+      with open('clientes.txt', 'w', encoding='utf-8') as arquivo:
+        # PERCORRE OS CLIENTES NA LISTA listadeclientes E ESCREVE CADA DADO NO DOCUMENTO
+        for cliente in listadeclientes:
+            arquivo.write(
+                f"{cliente['nome']};"
+                f"{cliente['cpf']};"
+                f"{cliente['endereco']};"
+                f"{cliente['telefone']}\n"
+            )
             
+#FUNÇÃO PARA SALVAR PRODUTOS NO DOCUMENTO
+def salvarproduto(listadeprodutos):
+    #ABRE OU CRIA O DOCUMENTO 'produtos.txt" E RODA O BLOCO DE CÓDIGO
+    with open ('produtos.txt', 'w', encoding='utf-8') as arquivo:
+        # PERCORRE OS PRODUTOS NA LISTA listadeprodutos E ESCREVE CADA DADO NO DOCUMENTO
+        for produto in listadeprodutos:
+            arquivo.write (
+                f'{produto['id']};'
+                f'{produto['nome']};'
+                f'{produto['descricao']};'
+                f'{produto['tamanho']};'
+                f'{produto['quantidade']}\n'
+            )
+
+#FUNÇÃO PARA EXCLUIR CLIENTES 
+def excluir_clientes(listadeclientes):
+    #LOOPING PARA O USUARIO POR UMA INFORMAÇÃO CORRETA
+    while True:
+        cpf_local = input("Digite o CPF do cliente: ")
+        #VERIFICA SE O DADO ESTÁ NA LISTA
+        if not infovalida('cpf', cpf_local, listadeclientes):
+            print("\nERROR: Cliente não encontrado.")
+        else:
+            break
+    #PERCORRE A LISTA, AO ENCONTRAR O CPF CORRESPONDENDTE, REMOVE O CLIENTE E PARA O LOOPING
+    for cliente in listadeclientes:
+        if cliente['cpf'] == cpf_local:
+            listadeclientes.remove(cliente)
+            print("\nCLIENTE REMOVIDO COM SUCESSO.\n")
+            break
+    # ATUALIZA O DOCUMENTO 'clientes.txt#
+    salvarcliente(listadeclientes)
+
+#FUNÇÃO PARA EXCLUIR PRODUTOS: 
+def excluir_produto(listadeprodutos):
+    #LOOPING PARA O USUARIO POR UMA INFORMAÇÃO CORRETA
+    while True:
+        id_local = int(input("Digite o ID do produto: "))
+        #VERIFICA SE O DADO ESTÁ NA LISTA
+        if not infovalida('id', id_local, listadeprodutos):
+            print("ERROR: Produto não encontrado.")
+        else:
+            break
+
+ #PERCORRE A LISTA, AO ENCONTRAR O CPF CORRESPONDENDTE, REMOVE O CLIENTE E PARA O LOOPING   
+    for produto in listadeprodutos:
+        if produto['id'] == id_local:
+            listadeprodutos.remove(produto)
+            print("\nPRODUTO REMOVIDO COM SUCESSO!\n")
+            break
+    # ATUALIZA O DOCUMENTO 'produtos.txt#
+    salvarproduto(listadeprodutos)
+
 
 def cadastroproduto(listadeprodutos):
     print('\n############## CADASTRO DE PRODUTOS ##########\n')
@@ -21,6 +129,7 @@ def cadastroproduto(listadeprodutos):
     #Validação para garantir que o ID cadastrado seja único
     while True:
         id = int(input("Digite o id do produto: "))
+
 
         if infovalida('id', id, listadeprodutos):
             print("\nERROR: ID já cadastrado no sistema")
@@ -160,7 +269,7 @@ def listarproduto(listadeprodutos):
     print('\n############## PRODUTOS CADASTRADOS ##########\n')
     # se não listadeprodutos, se ela estiver vazia, não há produto cadastrado
     if not listadeprodutos:
-        print("Nenhum produto cadastrado.")
+        print("NENHUM PRODUTO CADASTRADO.\n")
         return
 
     for produto in listadeprodutos:
@@ -170,7 +279,7 @@ def listarproduto(listadeprodutos):
 def listarcliente(listadeclientes):
     print('\n############## CLIENTES CADASTRADOS ##########\n')
     if not listadeclientes:
-        print("Nenhum cliente cadastrado.")
+        print("NENHUM CLIENTE ENCONTRADO.\n")
         return
 
     for cliente in listadeclientes:
