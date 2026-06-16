@@ -1,5 +1,5 @@
-#FUNÇÃO PARA VERIFICAR SE A INFORMAÇÃO DIGITA EXISTE NA LISTA
-def infovalida (chave, valor_procurado, lista_de_dados): #KEY DO DICIONARIO, VALOR COLOCADO NO USUÁRIO, LISTA PARA PROCURAR
+#FUNÇÃO PARA VERIFICAR SE A INFORMAÇÃO DIGITADA EXISTE NA LISTA
+def validar_informacao (chave, valor_procurado, lista_de_dados): #KEY DO DICIONARIO, VALOR COLOCADO NO USUÁRIO, LISTA PARA PROCURAR
     #PERCORRE A LISTA COLOCADA 
     for item in lista_de_dados:
         #CASO EXISTA NA LISTA, RETORNA VERDADEIRO 
@@ -47,7 +47,7 @@ def carregar_produtos():
                     'nome': nome,
                     'descricao': descricao,
                     'tamanho': tamanho,
-                    'quantidade': quantidade
+                    'quantidade': int(quantidade)
                 }
                 # VAI ADICIONAR A LISTA
                 listadeprodutos.append(produtos)
@@ -66,7 +66,8 @@ def salvarcliente (listadeclientes):
                 f"{cliente['nome']};"
                 f"{cliente['cpf']};"
                 f"{cliente['endereco']};"
-                f"{cliente['telefone']}\n"
+                f"{cliente['telefone']}"
+                f"{cliente['Produtos']}\n"
             )
             
 #FUNÇÃO PARA SALVAR PRODUTOS NO DOCUMENTO
@@ -76,23 +77,21 @@ def salvarproduto(listadeprodutos):
         # PERCORRE OS PRODUTOS NA LISTA listadeprodutos E ESCREVE CADA DADO NO DOCUMENTO
         for produto in listadeprodutos:
             arquivo.write (
-                f'{produto['id']};'
-                f'{produto['nome']};'
-                f'{produto['descricao']};'
-                f'{produto['tamanho']};'
-                f'{produto['quantidade']}\n'
+                f"{produto['id']};"
+                f"{produto['nome']};"
+                f"{produto['descricao']};"
+                f"{produto['tamanho']};"
+                f"{produto['quantidade']}\n"
             )
 
 #FUNÇÃO PARA EXCLUIR CLIENTES 
 def excluir_clientes(listadeclientes):
-    #LOOPING PARA O USUARIO POR UMA INFORMAÇÃO CORRETA
-    while True:
-        cpf_local = input("Digite o CPF do cliente: ")
-        #VERIFICA SE O DADO ESTÁ NA LISTA
-        if not infovalida('cpf', cpf_local, listadeclientes):
-            print("\nERROR: Cliente não encontrado.")
-        else:
-            break
+
+    cpf_local = input("Digite o CPF do cliente: ")
+    # VERIFICA SE O DADO ESTÁ NA LISTA
+    if not validar_informacao('cpf', cpf_local, listadeclientes):
+        print("\nERROR: Cliente não encontrado.")
+
     #PERCORRE A LISTA, AO ENCONTRAR O CPF CORRESPONDENDTE, REMOVE O CLIENTE E PARA O LOOPING
     for cliente in listadeclientes:
         if cliente['cpf'] == cpf_local:
@@ -104,14 +103,11 @@ def excluir_clientes(listadeclientes):
 
 #FUNÇÃO PARA EXCLUIR PRODUTOS: 
 def excluir_produto(listadeprodutos):
-    #LOOPING PARA O USUARIO POR UMA INFORMAÇÃO CORRETA
-    while True:
-        id_local = int(input("Digite o ID do produto: "))
-        #VERIFICA SE O DADO ESTÁ NA LISTA
-        if not infovalida('id', id_local, listadeprodutos):
-            print("ERROR: Produto não encontrado.")
-        else:
-            break
+
+    id_local = int(input("Digite o ID do produto: "))
+    # VERIFICA SE O DADO ESTÁ NA LISTA
+    if not validar_informacao('id', id_local, listadeprodutos):
+        print("ERROR: Produto não encontrado.")
 
  #PERCORRE A LISTA, AO ENCONTRAR O CPF CORRESPONDENDTE, REMOVE O CLIENTE E PARA O LOOPING   
     for produto in listadeprodutos:
@@ -130,8 +126,7 @@ def cadastroproduto(listadeprodutos):
     while True:
         id = int(input("Digite o id do produto: "))
 
-
-        if infovalida('id', id, listadeprodutos):
+        if validar_informacao('id', id, listadeprodutos):
             print("\nERROR: ID já cadastrado no sistema")
         else:
             break
@@ -141,7 +136,7 @@ def cadastroproduto(listadeprodutos):
     tamanho = input("Digite o tamanho do produto: ")
     
     while True:
-        quantidade = int(input("Digite o quantidade do produto: "))
+        quantidade = int(input("Digite a quantidade do produto: "))
         if quantidade < 0:
             print("\nERROR: Não é possível cadastrar quantidade negativa")
         else: 
@@ -193,14 +188,13 @@ def comprarproduto(id,quantidade_compra, listadeprodutos):
 def vendaproduto(listadeprodutos, listadeclientes):
     print('\n############## PONTO DE VENDA ##########\n')
 
-    # VARIAVEIS VAZIAS PARA PRODUTO E CLIENTE
+    # VARIÁVEL VAZIA PARA PRODUTO
     produto_encontrado = None
-    cliente_encontrado = None
 
     # LOOPING PARA ENCONTRAR PRODUTO
     while True:
         id_venda = int(input("Digite o id do produto para venda: "))
-        if not infovalida('id', id_venda, listadeprodutos):
+        if not validar_informacao('id', id_venda, listadeprodutos):
             print("\nERROR: Insira uma informação válida.")
         else:
             break
@@ -209,15 +203,9 @@ def vendaproduto(listadeprodutos, listadeclientes):
         if produto['id'] == id_venda:
             produto_encontrado = produto
             break
-    
-    # MOSTRA O AS INFORMAÇÕES DO PRODUTO
-    print('\nPRODUTO ENCONTRADO:')
-    print(f'''
-        ID: {produto_encontrado['id']}
-        NOME: {produto_encontrado['nome']}
-        QUANTIDADE: {produto_encontrado['quantidade']}
- ''')
-    
+
+    mostrarproduto(produto_encontrado)
+
     # LOOPING PARA O USUÁRIO POR UMA INFORMAÇÃO DE ESTOQUE CORRETA
     while True:
         quantidade_venda = int(input("Digite a quantidade do produto para venda: "))
@@ -225,17 +213,24 @@ def vendaproduto(listadeprodutos, listadeclientes):
             print("ERROR: Insira uma informação válida.")
         elif quantidade_venda > produto_encontrado['quantidade']:
             print("\nERROR: Estoque insuficiente")
-        else: 
+        else:
+            venda_avulsa(produto_encontrado, listadeclientes, quantidade_venda)
             break
-    
-    # LOOPING PARA FINALIZAR A VENDA
+
+        # DIMINUI O ESTOQUE
+        produto_encontrado['quantidade'] -= quantidade_venda
+        print("\nVenda finalizada com sucesso!")
+        break
+
+def venda_avulsa(produto_encontrado,listadeclientes, quantidade_venda):
+    cliente_encontrado = None
     while True:
         venda_avulsa = input("\nAnexar essa venda à um cliente? [ S / N ] ").strip().upper()
         # VALIDAÇÃO CASO A COMPRA SEJA ASSOCIADA À UM CLIENTE
         if venda_avulsa == 'S':
             while True:
                 cpf_cliente = input("Digite o CPF do cliente: ")
-                if not infovalida('cpf', cpf_cliente, listadeclientes):
+                if not validar_informacao('cpf', cpf_cliente, listadeclientes):
                     print("\nERROR: Insira uma informação válida.")
 
                 else: #CASO O CPF  EXISTA, UTILZAMOS ESSE LAÇO DE REPETIÇÃO PARA DESCOBRIR A QUEM ELE PERTENCE E ASSOCIA-LO A VÁRIAVEL VAZIA DE CLIENTE
@@ -244,9 +239,9 @@ def vendaproduto(listadeprodutos, listadeclientes):
                             cliente_encontrado = cliente
                             break
                     break
-            # VALIDAÇÃO PARA ASSOCIAR A COMBRA AO CLIENTE
+            # VALIDAÇÃO PARA ASSOCIAR A COMPRA AO CLIENTE
             if cliente_encontrado:
-                compra = { 
+                compra = {
                     "id": produto_encontrado['id'],
                     "nome": produto_encontrado['nome'],
                     "quantidade_comprada": quantidade_venda
@@ -261,9 +256,6 @@ def vendaproduto(listadeprodutos, listadeclientes):
             break
         else:
             print("\nERROR: Insira uma informação válida.")
-    # DIMINUI O ESTOQUE
-    produto_encontrado['quantidade'] -= quantidade_venda
-    
 
 def listarproduto(listadeprodutos):
     print('\n############## PRODUTOS CADASTRADOS ##########\n')
@@ -283,13 +275,7 @@ def listarcliente(listadeclientes):
         return
 
     for cliente in listadeclientes:
-        print(
-            f"\nNome: {cliente['nome']}"
-            f"\nCPF: {cliente['cpf'][:3]}-{cliente['cpf'][3:6]}-{cliente['cpf'][6:9]}.{cliente['cpf'][9:]}"
-            f"\nTelefone: ({cliente['telefone'][:2]}) {cliente['telefone'][2:7]}-{cliente['telefone'][7:]}"
-            f"\nEndereço: {cliente['endereco']}"
-            f"\nProdutos: {cliente['produtos']}"
-        )
+        mostrarcliente(cliente)
 
 def cadastrocliente(listadeclientes):
     print('\n############## CADASTRO DE CLIENTES ##########\n')
@@ -304,7 +290,7 @@ def cadastrocliente(listadeclientes):
             break
 
     while True:
-        if infovalida('cpf', cpf, listadeclientes):
+        if validar_informacao('cpf', cpf, listadeclientes):
             print("\nERROR: CPF já existe no banco de daods.")
             cpf = str(input("Digite o cpf do cliente: "))
         else:
@@ -347,3 +333,74 @@ def mostrarproduto(produto):
         f"Tamanho: {produto['tamanho']}\n"
         f"Quantidade: {produto['quantidade']}\n"
     )
+def mostrarcliente(cliente):
+    print(
+        f"\nNome: {cliente['nome']}"
+        f"\nCPF: {cliente['cpf'][:3]}-{cliente['cpf'][3:6]}-{cliente['cpf'][6:9]}.{cliente['cpf'][9:]}"
+        f"\nTelefone: ({cliente['telefone'][:2]}) {cliente['telefone'][2:7]}-{cliente['telefone'][7:]}"
+        f"\nEndereço: {cliente['endereco']}"
+        f"\nProdutos: {cliente['produtos']}"
+    )
+def gerar_relatorio_cliente(listadeclientes):
+    cpf = input("Digite o cpf do cliente: ")
+    for cliente in listadeclientes:
+        if cliente['cpf'] == cpf:
+            nome_arquivo = (f"relatorio_{cpf}.txt")
+            with open( nome_arquivo,'w',encoding='utf-8') as arquivo:
+                arquivo.write(
+                f"RELATÓRIO DO CLIENTE"
+                f"\nCPF: {cliente['cpf']}\n")
+                arquivo.write(
+                    f"CPF: {cliente['cpf']}\n")
+
+                arquivo.write(
+                    f"Telefone: "
+                    f"{cliente['telefone']}\n\n")
+
+                arquivo.write(
+                    "COMPRAS REALIZADAS:\n\n")
+
+                if not cliente['produtos']:
+                    arquivo.write(
+                        "Nenhuma compra registrada no cliente\n")
+
+                for compra in cliente['produtos']:
+                    arquivo.write(
+                        f"Produto:"
+                        f"{compra['nome']}\n")
+                    arquivo.write(
+                        f"Quantidade"
+                        f"{compra['quantidade_comprada']}\n")
+
+            print(f"Relatório salvado em {nome_arquivo}")
+            return
+    print("Cliente não encontrado")
+
+
+def gerar_relatorio_venda(listadeclientes):
+    with open('relatorio_geral.txt', 'w', encoding='utf-8') as arquivo:
+
+        arquivo.write(
+            'RELATORIO GERAL DE VENDAS\n'
+        )
+
+        for cliente in listadeclientes:
+
+            arquivo.write(
+                f"Cliente: {cliente['nome']}\n"
+                f"CPF: {cliente['cpf']}\n"
+                f"ENDEREÇO: {cliente['endereco']}\n"
+                f"TELFONE: {cliente['telefone']}\n"
+            )
+
+            if not cliente['produtos']:
+                arquivo.write(
+                    'Nenhuma compra registrada\n'
+                )
+
+                for compra in cliente['produtos']:
+                    arquivo.write(
+                        f"Produto: {compra['nome']}\n"
+                        f"Quantidade: {compra['quantidade_comprada']}\n"
+                    )
+        print('Relatorio gerado com sucesso!')
