@@ -1,3 +1,5 @@
+import ast # Biblioteca nativa para análise de estruturas de código
+
 #FUNÇÃO PARA VERIFICAR SE A INFORMAÇÃO DIGITADA EXISTE NA LISTA
 def validar_informacao (chave, valor_procurado, lista_de_dados): #KEY DO DICIONARIO, VALOR COLOCADO NO USUÁRIO, LISTA PARA PROCURAR
     #PERCORRE A LISTA COLOCADA 
@@ -16,14 +18,14 @@ def carregar_clientes ():
             #VAI PERCORRER CADA LINHA DO DOCUMENTO
             for linha in arquivo:
                 #AO RETIRAR OS ESPAÇOS E SEPARAR POR BASE DO ; VAI ANEXAR CADA DADO A UMA VARIAVEL
-                nome, cpf, telefone, endereco  = linha.strip().split(';')
+                nome, cpf, telefone, endereco, produto  = linha.strip().split(';')
                 #VAI POR AS VARIAVEIS EM UM DICIONARIO
                 clientes = {
                         "nome": nome,
                         "cpf": cpf,
                         "endereco": endereco,
                         "telefone": telefone,
-                        "produtos": []
+                        "produtos": ast.literal_eval(produto) # Transforma o texto "[]" em uma lista real []
                     }
                 # VAI ADICIONAR A LISTA
                 listadeclientes.append(clientes)
@@ -65,9 +67,14 @@ def salvarcliente (listadeclientes):
             arquivo.write(
                 f"{cliente['nome']};"
                 f"{cliente['cpf']};"
+                f"{cliente['telefone']};"
                 f"{cliente['endereco']};"
+<<<<<<< HEAD
                 f"{cliente['telefone']};"
                 f"{cliente.get('Produtos', [])}\n"
+=======
+                f"{cliente['produtos']}\n"
+>>>>>>> 58bd70d
             )
             
 #FUNÇÃO PARA SALVAR PRODUTOS NO DOCUMENTO
@@ -302,8 +309,12 @@ def cadastrocliente(listadeclientes):
         telefone = str(input("Digite o telefone do cliente: "))
         if len(telefone) != 11:
             print("\nERROR: Número inválido. Coloque uma informação válida.")
+<<<<<<< HEAD
             continue
         if validar_informacao('telefone', telefone, listadeclientes):
+=======
+        elif validar_informacao('telefone', telefone, listadeclientes):
+>>>>>>> 58bd70d
             print("\nERROR: Telefone já existe no banco de daods.")
         else:
             break

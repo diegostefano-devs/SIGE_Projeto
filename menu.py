@@ -8,14 +8,15 @@ import os
 listadeclientes = carregar_clientes()
 listadeprodutos = carregar_produtos()
 while True:
-
-    print('''[1] - CADASTRAR PRODUTO      
+    print(" ----------- SIGE -----------\n ")
+    print('''[1] - CADASTRAR PRODUTO      [6] - CADASTRAR CLIENTE
 [2] - EXCLUIR PRODUTO        [7] - EXCLUIR CLIENTE
 [3] - COMPRA DE PRODUTO      [8] - LISTAR CLIENTES
-[4] - VENDA DE PRODUTOS      [9] - GERAR RELATÓRIO DE CLIENTES
-[5] - LISTAR PRODUTOS        [10] - GERAR RELATÓRIO DE VENDAS
-[6] - CADASTRAR CLIENTE      [11] - SAIR
-      ''')
+[4] - VENDA DE PRODUTOS      
+[5] - LISTAR PRODUTOS        
+          
+[9] - GERAR RELATÓRIO DE CLIENTES
+[10] - GERAR RELATÓRIO DE VENDAS                [11] - SAIR    ''')
     
 
     usuario = input('\nDIGITE UMA OÇÃO: ')
