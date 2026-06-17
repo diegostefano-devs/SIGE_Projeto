@@ -66,8 +66,8 @@ def salvarcliente (listadeclientes):
                 f"{cliente['nome']};"
                 f"{cliente['cpf']};"
                 f"{cliente['endereco']};"
-                f"{cliente['telefone']}"
-                f"{cliente['Produtos']}\n"
+                f"{cliente['telefone']};"
+                f"{cliente.get('Produtos', [])}\n"
             )
             
 #FUNÇÃO PARA SALVAR PRODUTOS NO DOCUMENTO
@@ -297,10 +297,14 @@ def cadastrocliente(listadeclientes):
             break
 
     #Validação de telefone
+    # impedir telefone duplicado!
     while True:
         telefone = str(input("Digite o telefone do cliente: "))
         if len(telefone) != 11:
             print("\nERROR: Número inválido. Coloque uma informação válida.")
+            continue
+        if validar_informacao('telefone', telefone, listadeclientes):
+            print("\nERROR: Telefone já existe no banco de daods.")
         else:
             break
 
