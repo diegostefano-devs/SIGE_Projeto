@@ -61,7 +61,7 @@ def carregar_produtos():
 #FUNÇÃO PARA SALVAR OS CLIENTES NO DOCUMENTO
 def salvarcliente (listadeclientes):
       #ABRE OU CRIA O DOCUMENTO 'clientes.txt" E RODA O BLOCO DE CÓDIGO
-      with open('clientes.txt', 'w', encoding='utf-8') as arquivo:
+    with open('clientes.txt', 'w', encoding='utf-8') as arquivo:
         # PERCORRE OS CLIENTES NA LISTA listadeclientes E ESCREVE CADA DADO NO DOCUMENTO
         for cliente in listadeclientes:
             arquivo.write(
@@ -69,14 +69,8 @@ def salvarcliente (listadeclientes):
                 f"{cliente['cpf']};"
                 f"{cliente['telefone']};"
                 f"{cliente['endereco']};"
-<<<<<<< HEAD
-                f"{cliente['telefone']};"
-                f"{cliente.get('Produtos', [])}\n"
-=======
                 f"{cliente['produtos']}\n"
->>>>>>> 58bd70d
             )
-            
 #FUNÇÃO PARA SALVAR PRODUTOS NO DOCUMENTO
 def salvarproduto(listadeprodutos):
     #ABRE OU CRIA O DOCUMENTO 'produtos.txt" E RODA O BLOCO DE CÓDIGO
@@ -309,13 +303,9 @@ def cadastrocliente(listadeclientes):
         telefone = str(input("Digite o telefone do cliente: "))
         if len(telefone) != 11:
             print("\nERROR: Número inválido. Coloque uma informação válida.")
-<<<<<<< HEAD
             continue
         if validar_informacao('telefone', telefone, listadeclientes):
-=======
-        elif validar_informacao('telefone', telefone, listadeclientes):
->>>>>>> 58bd70d
-            print("\nERROR: Telefone já existe no banco de daods.")
+                print("\nERROR: Telefone já existe no banco de daods.")
         else:
             break
 
