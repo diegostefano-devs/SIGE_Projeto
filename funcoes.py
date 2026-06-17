@@ -180,8 +180,9 @@ def comprarproduto(id,quantidade_compra, listadeprodutos):
             produto["quantidade"] += quantidade_compra
             print("Compra realizada com sucesso")
             mostrarproduto(produto)
-
+            salvarproduto(listadeprodutos)
             return produto
+        
     print("Produto não encontrado")
     # esse print está fora do if (funciona como um else), pq se o código não entrar dentro do if,
     # vai retornar o que está no print
@@ -222,6 +223,9 @@ def vendaproduto(listadeprodutos, listadeclientes):
         produto_encontrado['quantidade'] -= quantidade_venda
         print("\nVenda finalizada com sucesso!")
         break
+    
+    produto_encontrado['quantidade'] -= quantidade_venda
+    salvarproduto(listadeprodutos)
 
 def venda_avulsa(produto_encontrado,listadeclientes, quantidade_venda):
     cliente_encontrado = None
