@@ -357,8 +357,9 @@ def gerar_relatorio_cliente(listadeclientes):
             nome_arquivo = (f"relatorio_{cpf}.txt")
             with open( nome_arquivo,'w',encoding='utf-8') as arquivo:
                 arquivo.write(
+                f"--------- SIGE ---------\n"
                 f"RELATÓRIO DO CLIENTE"
-                f"\nCPF: {cliente['cpf']}\n")
+                f"\nNOME: {cliente['nome']}\n")
                 arquivo.write(
                     f"CPF: {cliente['cpf']}\n")
 
@@ -375,11 +376,14 @@ def gerar_relatorio_cliente(listadeclientes):
 
                 for compra in cliente['produtos']:
                     arquivo.write(
-                        f"Produto:"
+                        f"Produto: "
                         f"{compra['nome']}\n")
                     arquivo.write(
-                        f"Quantidade"
+                        f"Quantidade: "
                         f"{compra['quantidade_comprada']}\n")
+                    arquivo.write(
+                        f'----------------------\n'
+                    )
 
             print(f"Relatório salvado em {nome_arquivo}")
             return
@@ -396,20 +400,22 @@ def gerar_relatorio_venda(listadeclientes):
         for cliente in listadeclientes:
 
             arquivo.write(
+                '---------- CLIENTE ---------- \n\n'
                 f"Cliente: {cliente['nome']}\n"
                 f"CPF: {cliente['cpf']}\n"
                 f"ENDEREÇO: {cliente['endereco']}\n"
                 f"TELFONE: {cliente['telefone']}\n"
             )
-
+            arquivo.write(f'\n ---------- HISTÓRICO DE COMPRAS ----------\n\n')
             if not cliente['produtos']:
                 arquivo.write(
                     'Nenhuma compra registrada\n'
                 )
 
-                for compra in cliente['produtos']:
-                    arquivo.write(
-                        f"Produto: {compra['nome']}\n"
-                        f"Quantidade: {compra['quantidade_comprada']}\n"
+            for compra in cliente['produtos']:
+                arquivo.write(
+                    
+                    f"Produto: {compra['nome']}\n"
+                    f"Quantidade: {compra['quantidade_comprada']}\n"
                     )
         print('Relatorio gerado com sucesso!')
