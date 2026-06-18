@@ -25,5 +25,13 @@ Funcionalidades:
     Relatório de Vendas Geral
 
 Arquivos:
+
     menu.py: Responsável pela interface principal e navegação pelo sistema.
     funcoes.py: Contém as funções utilizadas na manipulação de dados
+
+Como Executar:
+
+    Faça o download ou clone o repositório.
+    Abra a pasta do projeto.
+    Execute o arquivo principal, menu.py:
+    
